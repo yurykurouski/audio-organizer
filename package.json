@@ -1,9 +1,9 @@
 {
-  "name": "read-ipod",
+  "name": "audio-organizer",
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "run": "bun build index.ts --compile --outfile mp3-organizer && ./mp3-organizer",
+    "run": "bun build index.ts --compile --outfile audio-organizer && ./audio-organizer",
     "start": "node dist/index.js",
     "build": "tsc",
     "watch": "tsc --watch",
@@ -12,7 +12,7 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Organizes all iPod Classic supported audio files (MP3, M4A, AAC, AIFF, WAV, etc.) by artist and album based on metadata",
   "devDependencies": {
     "@types/node": "^22.15.21",
     "bun": "^1.2.14",

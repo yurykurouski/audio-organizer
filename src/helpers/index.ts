@@ -1,6 +1,6 @@
 export { sanitizeFolderName } from './sanitizeFolderName';
 export { fixEncoding } from './fixEncoding';
-export { findMp3Files } from './findMp3Files';
-export { readMp3Metadata } from './readMp3Metadata';
+export { findAudioFiles } from './findAudioFiles';
+export { readAudioMetadata } from './readAudioMetadata';
 export { ensureDirectory } from './ensureDirectory';
 export { organizeFile } from './organizeFile';

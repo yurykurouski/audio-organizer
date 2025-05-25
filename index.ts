@@ -1,7 +1,7 @@
 import * as path from 'path';
 import {
-    readMp3Metadata,
-    findMp3Files,
+    readAudioMetadata,
+    findAudioFiles,
     ensureDirectory,
     organizeFile
 } from './src/helpers';
@@ -10,28 +10,28 @@ import {
 // Main function
 async function main(): Promise<void> {
     const currentDirectory = process.cwd();
-    console.log(`Scanning for MP3 files in: ${currentDirectory}`);
+    console.log(`Scanning for audio files in: ${currentDirectory}`);
 
     try {
-        // Find all MP3 files
-        const mp3Files = await findMp3Files(currentDirectory);
+        // Find all audio files
+        const audioFiles = await findAudioFiles(currentDirectory);
 
-        if (mp3Files.length === 0) {
-            console.log('No MP3 files found.');
+        if (audioFiles.length === 0) {
+            console.log('No audio files found.');
             return;
         } else {
-            console.log(`Found ${mp3Files.length} MP3 files`);
+            console.log(`Found ${audioFiles.length} audio files`);
         }
 
         // Create organized music directory
         const organizedDir = path.join(currentDirectory, 'Organized_Music');
         await ensureDirectory(organizedDir);
 
-        // Process each MP3 file
-        for (const filePath of mp3Files) {
+        // Process each audio file
+        for (const filePath of audioFiles) {
             console.log(`Processing: ${filePath}`);
 
-            const fileInfo = await readMp3Metadata(filePath);
+            const fileInfo = await readAudioMetadata(filePath);
             if (fileInfo) {
                 console.log(`  Artist: ${fileInfo.artist}`);
                 console.log(`  Album: ${fileInfo.album}`);
