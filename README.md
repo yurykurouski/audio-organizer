@@ -1,11 +1,11 @@
-# MP3 Organizer with Encoding Fix
+# Audio files Organizer with Encoding Fix
 
 This application scans all MP3 files in directories and subdirectories, reads their metadata using the `music-metadata` package, and organizes them into a proper Artist/Album folder structure.
 
 ## Features
 
-- **Recursive scanning**: Finds all `.mp3` files in the current directory and all subdirectories
-- **Metadata extraction**: Reads artist, album, and title information from MP3 ID3 tags
+- **Recursive scanning**: Finds all audio files in the current directory and all subdirectories
+- **Metadata extraction**: Reads artist, album, and title information from ID3 tags
 - **Automatic organization**: Creates folder structure: `Artist/Album/Title.mp3`
 - **Encoding fix**: Automatically detects and converts Windows-1251 (Cyrillic) encoding to UTF-8
 - **Duplicate handling**: Adds numeric suffixes if files with the same name already exist
@@ -13,7 +13,7 @@ This application scans all MP3 files in directories and subdirectories, reads th
 
 ## Character Encoding Issue Fix
 
-The application automatically fixes character encoding issues commonly found in MP3 files created on Windows systems with Cyrillic text. 
+The application automatically fixes character encoding issues commonly found in files created on Windows systems with Cyrillic text. 
 
 ### Examples of Fixed Names:
 - `Íåóðî Äóáåëü` → `Нейро Дубель` (Neuro Dubel)
@@ -33,16 +33,16 @@ npm install
 
 ## Usage
 
-1. Navigate to the directory containing your MP3 files
+1. Navigate to the directory containing your audio files
 2. Run the application:
 ```bash
 npm run
 ```
 
 The application will:
-1. Scan the current directory and all subdirectories for MP3 files
+1. Scan the current directory and all subdirectories for audio files
 2. Create an `Organized_Music` folder
-3. Read metadata from each MP3 file
+3. Read metadata from each file
 4. Create Artist and Album folders as needed
 5. Move files to the appropriate location with proper encoding
 
@@ -84,7 +84,7 @@ To compile the project into a single executable file that can be run anywhere wi
 npm run bundle
 ```
 
-This creates a `mp3-organizer` executable file (~58MB) that includes:
+This creates a `audio-organizer` executable file (~58MB) that includes:
 - All source code compiled into a single binary
 - All Node.js dependencies bundled
 - The Bun runtime embedded
@@ -93,30 +93,30 @@ This creates a `mp3-organizer` executable file (~58MB) that includes:
 
 Once compiled, you can:
 
-1. **Run it directly in any directory with MP3 files:**
+1. **Run it directly in any directory with audio files:**
    ```bash
-   ./mp3-organizer
+   ./audio-organizer
    ```
 
 2. **Copy it to any location and run:**
    ```bash
-   cp mp3-organizer /path/to/your/music/folder/
+   cp audio-organizer /path/to/your/music/folder/
    cd /path/to/your/music/folder/
-   ./mp3-organizer
+   ./audio-organizer
    ```
 
 3. **Add it to your PATH for global usage:**
    ```bash
-   cp mp3-organizer /usr/local/bin/
+   cp audio-organizer /usr/local/bin/
    # Now you can run it from anywhere:
-   mp3-organizer
+   audio-organizer
    ```
 
 The executable will work on any macOS system (arm64) without requiring Node.js, npm, or any other dependencies to be installed.
 
 ## Dependencies
 
-- `music-metadata` - For reading MP3 metadata
+- `music-metadata` - For reading audio metadata
 - `iconv-lite` - For character encoding conversion
 - `typescript` - For TypeScript compilation
 - `@types/node` - TypeScript definitions for Node.js
