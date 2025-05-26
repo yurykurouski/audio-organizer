@@ -125,3 +125,42 @@ export function promptForDirectory(question: string): Promise<string> {
         });
     });
 }
+
+// Function to prompt user for file conflict resolution
+export function promptForFileConflict(existingFile: string, newFile: string): Promise<'keep' | 'replace' | 'rename'> {
+    return new Promise((resolve) => {
+        const readline = require('readline');
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        console.log(`\n⚠️  File conflict detected:`);
+        console.log(`   Existing: ${existingFile}`);
+        console.log(`   New file: ${newFile}`);
+        console.log(`\nOptions:`);
+        console.log(`   1. Keep existing file (skip new file)`);
+        console.log(`   2. Replace existing file with new file`);
+        console.log(`   3. Rename new file (add number suffix)`);
+
+        rl.question('Enter your choice (1/2/3): ', (answer: string) => {
+            rl.close();
+
+            switch (answer.trim()) {
+                case '1':
+                    resolve('keep');
+                    break;
+                case '2':
+                    resolve('replace');
+                    break;
+                case '3':
+                    resolve('rename');
+                    break;
+                default:
+                    console.log('Invalid choice. Renaming new file by default.');
+                    resolve('rename');
+                    break;
+            }
+        });
+    });
+}

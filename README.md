@@ -12,6 +12,7 @@ This application recursively scans all audio files in directories and subdirecto
 - **Safe folder names**: Removes invalid characters from folder names
 - **ASCII visualization**: Shows a visual tree structure of the organized files
 - **Organization summary**: Displays statistics about processed files, artists, and albums
+- **File conflict resolution**: Interactive prompts when duplicate files are detected
 
 ## Directory Selection Options
 
@@ -22,6 +23,31 @@ The application offers three ways to choose your source directory:
 3. **Enter custom target folder path** - Allows you to specify any directory path
 
 When you run the application, you'll be prompted to choose one of these options.
+
+## File Conflict Resolution
+
+When the application encounters a file that already exists in the target location, it will prompt you with three options:
+
+### Conflict Options:
+
+1. **Keep existing file (skip new file)** - The existing file remains unchanged, and the new file is skipped
+2. **Replace existing file with new file** - The existing file is removed and replaced with the new file (using the correct filename from metadata)
+3. **Rename new file (add number suffix)** - The new file is saved with a numeric suffix (e.g., `song_1.mp3`, `song_2.mp3`)
+
+### Example Conflict Resolution:
+```
+⚠️  File conflict detected:
+   Existing: /path/to/Organized_Music/Artist/Album/Song.mp3
+   New file: /path/to/iPod_Control/Music/F01/ABCD.mp3
+
+Options:
+   1. Keep existing file (skip new file)
+   2. Replace existing file with new file
+   3. Rename new file (add number suffix)
+Enter your choice (1/2/3): 
+```
+
+This ensures you have full control over how duplicate files are handled during the organization process.
 
 #### TODO:
  - Option to create a copy of files instead process in place
@@ -62,6 +88,7 @@ The application will:
 3. Read metadata from each file
 4. Create Artist and Album folders as needed
 5. Move files to the appropriate location with proper encoding
+6. Prompt for user input when file conflicts are detected
 
 ## File Structure
 

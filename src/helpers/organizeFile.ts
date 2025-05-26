@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { promisify } from 'util';
 import { FileInfo, FileOperation } from '../types';
 import { ensureDirectory } from './ensureDirectory';
+import { promptForFileConflict } from './revertOperations';
 
 
 const rename = promisify(fs.rename);
@@ -23,16 +24,38 @@ export async function organizeFile(fileInfo: FileInfo, baseDirectory: string): P
     try {
         // Check if destination file already exists
         if (fs.existsSync(newFilePath)) {
-            console.log(`File already exists: ${newFilePath}`);
-            // If file exists, add a number suffix
-            let counter = 1;
-            let uniqueFilePath = newFilePath;
-            while (fs.existsSync(uniqueFilePath)) {
-                const baseName = path.basename(newFileName, originalExt);
-                uniqueFilePath = path.join(albumDir, `${baseName}_${counter}${originalExt}`);
-                counter++;
+            const choice = await promptForFileConflict(newFilePath, fileInfo.filePath);
+
+            switch (choice) {
+                case 'keep':
+                    console.log(`Keeping existing file: ${newFilePath}`);
+                    console.log(`Skipping: ${fileInfo.filePath}`);
+                    return {
+                        operation: null,
+                        createdDirs
+                    };
+
+                case 'replace':
+                    console.log(`Replacing existing file: ${newFilePath}`);
+                    // Remove the existing file first, then continue with the move operation
+                    fs.unlink(newFilePath, () => console.log(`Removed existing file: ${newFilePath}`));
+                    // Continue with the move operation using the correct filename from metadata
+                    break;
+
+                case 'rename':
+                    console.log(`Renaming new file to avoid conflict...`);
+                    // Find a unique name with number suffix
+                    let counter = 1;
+                    let uniqueFilePath = newFilePath;
+                    while (fs.existsSync(uniqueFilePath)) {
+                        const baseName = path.basename(newFileName, originalExt);
+                        uniqueFilePath = path.join(albumDir, `${baseName}_${counter}${originalExt}`);
+                        counter++;
+                    }
+                    newFilePath = uniqueFilePath;
+                    console.log(`New filename: ${path.basename(newFilePath)}`);
+                    break;
             }
-            newFilePath = uniqueFilePath;
         }
 
         await rename(fileInfo.filePath, newFilePath);

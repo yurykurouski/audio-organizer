@@ -8,6 +8,7 @@ import {
     revertOperations,
     promptUser,
     promptForDirectory,
+    promptForFileConflict,
     visualizeDirectoryStructure,
     generateOrganizationSummary
 } from './src/helpers';
