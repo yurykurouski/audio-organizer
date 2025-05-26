@@ -1,6 +1,6 @@
 # Audio files Organizer with Encoding Fix
 
-This application scans all audio files supported by iPod Classic in directories and subdirectories, reads their metadata using the `music-metadata` package, and organizes them into a proper Artist/Album folder structure.
+This application recursively scans all audio files in directories and subdirectories, reads their metadata using the `music-metadata` package, and organizes them into a proper Artist/Album folder structure.
 
 ## Features
 
@@ -57,8 +57,8 @@ Organized_Music/
 │   └── Культура/
 │       └── Культура.mp3
 ├── Ляпис Трубецкой/
-│   ├── Дзеці майго горада/
-│   │   └── Воiны светла.mp3
+│   ├── Грай/
+│   │   └── Зорачкі.mp3
 │   └── Мумiё/
 │       └── Мумiё.mp3
 └── Iron Maiden/
