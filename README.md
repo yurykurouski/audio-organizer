@@ -10,6 +10,8 @@ This application recursively scans all audio files in directories and subdirecto
 - **Encoding fix**: Automatically detects and converts Windows-1251 (Cyrillic) encoding to UTF-8
 - **Duplicate handling**: Adds numeric suffixes if files with the same name already exist
 - **Safe folder names**: Removes invalid characters from folder names
+- **ASCII visualization**: Shows a visual tree structure of the organized files
+- **Organization summary**: Displays statistics about processed files, artists, and albums
 
 ## Directory Selection Options
 
@@ -25,7 +27,6 @@ When you run the application, you'll be prompted to choose one of these options.
  - Option to create a copy of files instead process in place
  - Whitelst / blacklist file extensions
  - Video files
- - ASCII visualization of created structure
 
 ## Character Encoding Issue Fix
 

@@ -7,7 +7,9 @@ import {
     organizeFile,
     revertOperations,
     promptUser,
-    promptForDirectory
+    promptForDirectory,
+    visualizeDirectoryStructure,
+    generateOrganizationSummary
 } from './src/helpers';
 import { FileOperation } from './src/types';
 
@@ -93,6 +95,12 @@ async function main(): Promise<void> {
 
         console.log('\nOrganization complete!');
         console.log(`Files have been organized in: ${organizedDir}`);
+
+        // Display organization summary and ASCII visualization
+        if (allOperations.length > 0) {
+            console.log(generateOrganizationSummary(allOperations));
+            console.log(visualizeDirectoryStructure(organizedDir));
+        }
 
         // Ask user if they want to revert changes
         const shouldRevert = await promptUser('\nDo you want to revert all changes? (y/n): ');

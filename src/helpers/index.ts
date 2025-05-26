@@ -5,3 +5,4 @@ export { readAudioMetadata } from './readAudioMetadata';
 export { ensureDirectory } from './ensureDirectory';
 export { organizeFile } from './organizeFile';
 export { revertOperations, promptUser, promptForDirectory } from './revertOperations';
+export { visualizeDirectoryStructure, generateOrganizationSummary } from './visualizeStructure';
