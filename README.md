@@ -32,12 +32,12 @@ A powerful command-line tool that organizes your music collection by reading met
 ## 🚀 Quick Start
 
 ### Option 1: Download Pre-compiled Binary (Recommended)
-Download the latest pre-compiled executable from the [Releases](https://github.com/your-username/audio-organizer/releases) page:
+Download the latest pre-compiled executable from the [Releases](https://github.com/yurykurouski/audio-organizer/releases) page:
 
 ```bash
 # Download the binary for your platform
 # macOS (arm64/Intel)
-wget https://github.com/your-username/audio-organizer/releases/latest/download/audio-organizer-macos
+wget https://github.com/yurykurouski/audio-organizer/releases/latest/download/audio-organizer-macos
 chmod +x audio-organizer-macos
 ./audio-organizer-macos
 
@@ -45,7 +45,7 @@ chmod +x audio-organizer-macos
 # Download audio-organizer-windows.exe and run it
 
 # Linux
-wget https://github.com/your-username/audio-organizer/releases/latest/download/audio-organizer-linux
+wget https://github.com/yurykurouski/audio-organizer/releases/latest/download/audio-organizer-linux
 chmod +x audio-organizer-linux
 ./audio-organizer-linux
 ```
@@ -53,7 +53,7 @@ chmod +x audio-organizer-linux
 ### Option 2: Compile from Source Code
 ```bash
 # Clone or download the project
-git clone https://github.com/your-username/audio-organizer.git
+git clone https://github.com/yurykurouski/audio-organizer.git
 cd audio-organizer
 npm install
 ```
