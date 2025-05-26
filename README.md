@@ -2,6 +2,8 @@
 
 This application recursively scans all audio files in directories and subdirectories, reads their metadata using the `music-metadata` package, and organizes them into a proper Artist/Album folder structure.
 
+
+
 ## Features
 
 - **Recursive scanning**: Finds all audio files in the current directory and all subdirectories
@@ -10,6 +12,13 @@ This application recursively scans all audio files in directories and subdirecto
 - **Encoding fix**: Automatically detects and converts Windows-1251 (Cyrillic) encoding to UTF-8
 - **Duplicate handling**: Adds numeric suffixes if files with the same name already exist
 - **Safe folder names**: Removes invalid characters from folder names
+
+#### TODO:
+ - Enter target folder path / or scan current directory
+ - Option to create a copy of files instead process in place
+ - Whitelst / blacklist file extensions
+ - Video files
+ - ASCII visualization of created structure
 
 ## Character Encoding Issue Fix
 
