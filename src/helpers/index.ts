@@ -6,3 +6,10 @@ export { ensureDirectory } from './ensureDirectory';
 export { organizeFile } from './organizeFile';
 export { revertOperations, promptUser, promptForDirectory, promptForFileConflict } from './revertOperations';
 export { visualizeDirectoryStructure, generateOrganizationSummary } from './visualizeStructure';
+export {
+    promptForTargetDirectory,
+    promptForOperationMode,
+    promptForFileConflictInteractive,
+    promptForConfirmation,
+    promptForCustomPath
+} from './interactivePrompts';

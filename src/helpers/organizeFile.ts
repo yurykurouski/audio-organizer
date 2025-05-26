@@ -2,8 +2,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { promisify } from 'util';
 import { FileInfo, FileOperation } from '../types';
-import { ensureDirectory } from './ensureDirectory';
-import { promptForFileConflict } from './revertOperations';
+import { ensureDirectory } from './ensureDirectory.js';
+import { promptForFileConflictInteractive } from './interactivePrompts.js';
 
 
 const rename = promisify(fs.rename);
@@ -25,7 +25,7 @@ export async function organizeFile(fileInfo: FileInfo, baseDirectory: string, op
     try {
         // Check if destination file already exists
         if (fs.existsSync(newFilePath)) {
-            const choice = await promptForFileConflict(newFilePath, fileInfo.filePath);
+            const choice = await promptForFileConflictInteractive(newFilePath, fileInfo.filePath);
 
             switch (choice) {
                 case 'keep':

@@ -6,28 +6,26 @@ import {
     ensureDirectory,
     organizeFile,
     revertOperations,
-    promptUser,
-    promptForDirectory,
+    promptForTargetDirectory,
+    promptForOperationMode,
+    promptForConfirmation,
+    promptForCustomPath,
     visualizeDirectoryStructure,
     generateOrganizationSummary
-} from './src/helpers';
+} from './src/helpers/index';
 import { FileOperation } from './src/types';
 
 
 // Function to get target directory from user
 async function getTargetDirectory(): Promise<string> {
     console.log('\n=== Audio Files Organizer ===');
-    console.log('Choose scanning option:');
-    console.log('1. Scan current directory recursively');
-    console.log('2. Scan for iPod music files in iPod_Control/Music folder');
-    console.log('3. Enter custom target folder path');
 
-    const choice = await promptForDirectory('Enter your choice (1/2/3): ');
+    const choice = await promptForTargetDirectory();
 
-    switch (choice.trim()) {
-        case '1':
+    switch (choice) {
+        case 'current':
             return process.cwd();
-        case '2':
+        case 'ipod':
             const currentDirectory = process.cwd();
             const iPodMusicDir = path.join(currentDirectory, 'iPod_Control', 'Music');
 
@@ -37,8 +35,8 @@ async function getTargetDirectory(): Promise<string> {
                 process.exit(1);
             }
             return iPodMusicDir;
-        case '3':
-            const customPath = await promptForDirectory('Enter the full path to scan: ');
+        case 'custom':
+            const customPath = await promptForCustomPath();
             if (!fs.existsSync(customPath)) {
                 console.error(`Directory not found: ${customPath}`);
                 process.exit(1);
@@ -52,21 +50,7 @@ async function getTargetDirectory(): Promise<string> {
 
 // Function to get operation mode from user
 async function getOperationMode(): Promise<'copy' | 'move'> {
-    console.log('\nChoose operation mode:');
-    console.log('1. Copy files (original files remain in place)');
-    console.log('2. Move files (original files will be moved)');
-
-    const choice = await promptForDirectory('Enter your choice (1/2): ');
-
-    switch (choice.trim()) {
-        case '1':
-            return 'copy';
-        case '2':
-            return 'move';
-        default:
-            console.log('Invalid choice. Using copy mode by default.');
-            return 'copy';
-    }
+    return await promptForOperationMode();
 }
 
 // Main function
@@ -126,7 +110,7 @@ async function main(): Promise<void> {
         }
 
         // Ask user if they want to revert changes
-        const shouldRevert = await promptUser(`\nDo you want to revert all changes? ${operationMode === 'copy' ? '(copied files will be deleted)' : '(files will be moved back)'} (y/n): `);
+        const shouldRevert = await promptForConfirmation(`Do you want to revert all changes? ${operationMode === 'copy' ? '(copied files will be deleted)' : '(files will be moved back)'}`);
         if (shouldRevert) {
             await revertOperations(allOperations, allCreatedDirectories);
         } else {
