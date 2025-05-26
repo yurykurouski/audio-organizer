@@ -1,6 +1,6 @@
 # Audio files Organizer with Encoding Fix
 
-This application scans all MP3 files in directories and subdirectories, reads their metadata using the `music-metadata` package, and organizes them into a proper Artist/Album folder structure.
+This application scans all audio files supported by iPod Classic in directories and subdirectories, reads their metadata using the `music-metadata` package, and organizes them into a proper Artist/Album folder structure.
 
 ## Features
 
