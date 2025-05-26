@@ -2,8 +2,6 @@
 
 This application recursively scans all audio files in directories and subdirectories, reads their metadata using the `music-metadata` package, and organizes them into a proper Artist/Album folder structure.
 
-
-
 ## Features
 
 - **Recursive scanning**: Finds all audio files in the current directory and all subdirectories
