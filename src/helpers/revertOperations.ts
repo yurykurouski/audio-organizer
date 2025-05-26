@@ -109,3 +109,19 @@ export function promptUser(question: string): Promise<boolean> {
         });
     });
 }
+
+// Function to prompt user for directory input
+export function promptForDirectory(question: string): Promise<string> {
+    return new Promise((resolve) => {
+        const readline = require('readline');
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        rl.question(question, (answer: string) => {
+            rl.close();
+            resolve(answer.trim());
+        });
+    });
+}

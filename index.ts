@@ -6,27 +6,57 @@ import {
     ensureDirectory,
     organizeFile,
     revertOperations,
-    promptUser
+    promptUser,
+    promptForDirectory
 } from './src/helpers';
 import { FileOperation } from './src/types';
 
 
+// Function to get target directory from user
+async function getTargetDirectory(): Promise<string> {
+    console.log('\n=== Audio Files Organizer ===');
+    console.log('Choose scanning option:');
+    console.log('1. Scan current directory recursively');
+    console.log('2. Scan for iPod music files in iPod_Control/Music folder');
+    console.log('3. Enter custom target folder path');
+
+    const choice = await promptForDirectory('Enter your choice (1/2/3): ');
+
+    switch (choice.trim()) {
+        case '1':
+            return process.cwd();
+        case '2':
+            const currentDirectory = process.cwd();
+            const iPodMusicDir = path.join(currentDirectory, 'iPod_Control', 'Music');
+
+            if (!fs.existsSync(iPodMusicDir)) {
+                console.error(`iPod_Control/Music directory not found at: ${iPodMusicDir}`);
+                console.log('Please ensure this is an iPod directory with the iPod_Control folder.');
+                process.exit(1);
+            }
+            return iPodMusicDir;
+        case '3':
+            const customPath = await promptForDirectory('Enter the full path to scan: ');
+            if (!fs.existsSync(customPath)) {
+                console.error(`Directory not found: ${customPath}`);
+                process.exit(1);
+            }
+            return customPath;
+        default:
+            console.log('Invalid choice. Scanning current directory by default.');
+            return process.cwd();
+    }
+}
+
 // Main function
 async function main(): Promise<void> {
-    const currentDirectory = process.cwd();
-    const iPodMusicDir = path.join(currentDirectory, 'iPod_Control', 'Music');
-    console.log(`Scanning for audio files in iPod folder: ${iPodMusicDir}`);
-
     try {
-        // Check if iPod_Control/Music directory exists
-        if (!fs.existsSync(iPodMusicDir)) {
-            console.error(`iPod_Control/Music directory not found at: ${iPodMusicDir}`);
-            console.log('Please ensure this is an iPod directory with the iPod_Control folder.');
-            return;
-        }
+        // Get target directory from user
+        const targetDirectory = await getTargetDirectory();
+        console.log(`\nScanning for audio files in: ${targetDirectory}`);
 
-        // Find all audio files in iPod_Control/Music
-        const audioFiles = await findAudioFiles(iPodMusicDir);
+        // Find all audio files in the target directory
+        const audioFiles = await findAudioFiles(targetDirectory);
 
         if (audioFiles.length === 0) {
             console.log('No audio files found.');
@@ -36,7 +66,7 @@ async function main(): Promise<void> {
         }
 
         // Create organized music directory
-        const organizedDir = path.join(currentDirectory, 'Organized_Music');
+        const organizedDir = path.join(process.cwd(), 'Organized_Music');
         const organizedDirCreated = await ensureDirectory(organizedDir);
 
         // Track all operations for potential revert

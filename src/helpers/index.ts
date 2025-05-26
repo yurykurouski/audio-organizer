@@ -4,4 +4,4 @@ export { findAudioFiles } from './findAudioFiles';
 export { readAudioMetadata } from './readAudioMetadata';
 export { ensureDirectory } from './ensureDirectory';
 export { organizeFile } from './organizeFile';
-export { revertOperations, promptUser } from './revertOperations';
+export { revertOperations, promptUser, promptForDirectory } from './revertOperations';

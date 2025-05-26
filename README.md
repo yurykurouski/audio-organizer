@@ -11,8 +11,17 @@ This application recursively scans all audio files in directories and subdirecto
 - **Duplicate handling**: Adds numeric suffixes if files with the same name already exist
 - **Safe folder names**: Removes invalid characters from folder names
 
+## Directory Selection Options
+
+The application offers three ways to choose your source directory:
+
+1. **Scan current directory** - Organizes audio files in the current working directory
+2. **Scan iPod_Control/Music folder** - Specifically targets iPod's hidden music folder structure
+3. **Enter custom target folder path** - Allows you to specify any directory path
+
+When you run the application, you'll be prompted to choose one of these options.
+
 #### TODO:
- - Enter target folder path / or scan current directory
  - Option to create a copy of files instead process in place
  - Whitelst / blacklist file extensions
  - Video files
