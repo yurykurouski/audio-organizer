@@ -45,8 +45,15 @@ export async function revertOperations(operations: FileOperation[], createdDirec
         const operation = operations[i];
         try {
             if (fs.existsSync(operation.newPath)) {
-                await rename(operation.newPath, operation.originalPath);
-                console.log(`Reverted: ${operation.newPath} -> ${operation.originalPath}`);
+                if (operation.operation === 'copy') {
+                    // For copied files, just delete the copy
+                    await unlink(operation.newPath);
+                    console.log(`Deleted copied file: ${operation.newPath}`);
+                } else {
+                    // For moved files, move them back
+                    await rename(operation.newPath, operation.originalPath);
+                    console.log(`Reverted: ${operation.newPath} -> ${operation.originalPath}`);
+                }
             }
         } catch (error) {
             console.error(`Error reverting file ${operation.newPath}:`, error);

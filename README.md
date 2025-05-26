@@ -7,12 +7,14 @@ This application recursively scans all audio files in directories and subdirecto
 - **Recursive scanning**: Finds all audio files in the current directory and all subdirectories
 - **Metadata extraction**: Reads artist, album, and title information from ID3 tags
 - **Automatic organization**: Creates folder structure: `Artist/Album/Title.mp3`
+- **Copy or Move modes**: Choose to copy files (preserving originals) or move them
 - **Encoding fix**: Automatically detects and converts Windows-1251 (Cyrillic) encoding to UTF-8
 - **Duplicate handling**: Adds numeric suffixes if files with the same name already exist
 - **Safe folder names**: Removes invalid characters from folder names
 - **ASCII visualization**: Shows a visual tree structure of the organized files
 - **Organization summary**: Displays statistics about processed files, artists, and albums
 - **File conflict resolution**: Interactive prompts when duplicate files are detected
+- **Revert operations**: Ability to undo all changes made during organization
 
 ## Directory Selection Options
 
@@ -23,6 +25,46 @@ The application offers three ways to choose your source directory:
 3. **Enter custom target folder path** - Allows you to specify any directory path
 
 When you run the application, you'll be prompted to choose one of these options.
+
+## Operation Modes
+
+The application offers two operation modes for handling your audio files:
+
+### 1. Copy Mode (Recommended for Safety)
+- **Original files remain untouched** in their current location
+- **Organized copies** are created in the `Organized_Music` folder
+- **Safe for testing** - you can experiment without losing original file organization
+- **Ideal for iPods** - preserves the original iPod file structure while creating a readable copy
+
+### 2. Move Mode (Traditional)
+- **Files are moved** from their original location to the organized structure
+- **Original file locations become empty** (except for any unprocessed files)
+- **More storage efficient** - no duplicate files created
+- **Permanent reorganization** of your music library
+
+### How to Choose:
+
+```
+Choose operation mode:
+1. Copy files (original files remain in place)
+2. Move files (original files will be moved)
+Enter your choice (1/2): 1
+```
+
+**For iPod users**: Copy mode is especially useful as it allows you to:
+- Keep your iPod's original file structure intact
+- Create a human-readable organized copy for browsing
+- Maintain iPod functionality while having access to properly named files
+
+### Revert Operations
+
+Both modes support reverting changes:
+- **Copy mode**: Deletes all organized copies, leaving originals untouched
+- **Move mode**: Moves files back to their original locations
+
+```
+Do you want to revert all changes? (copied files will be deleted) (y/n): n
+```
 
 ## File Conflict Resolution
 
@@ -50,7 +92,6 @@ Enter your choice (1/2/3):
 This ensures you have full control over how duplicate files are handled during the organization process.
 
 #### TODO:
- - Option to create a copy of files instead process in place
  - Whitelst / blacklist file extensions
  - Video files
 
@@ -83,12 +124,69 @@ npm run
 ```
 
 The application will:
-1. Scan the current directory and all subdirectories for audio files
-2. Create an `Organized_Music` folder
-3. Read metadata from each file
-4. Create Artist and Album folders as needed
-5. Move files to the appropriate location with proper encoding
-6. Prompt for user input when file conflicts are detected
+1. Prompt you to choose a scanning option (current directory, iPod folder, or custom path)
+2. Ask you to select an operation mode (copy or move files)
+3. Scan the selected directory and all subdirectories for audio files
+4. Create an `Organized_Music` folder
+5. Read metadata from each file
+6. Create Artist and Album folders as needed
+7. Copy or move files to the appropriate location with proper encoding
+8. Prompt for user input when file conflicts are detected
+9. Display organization summary and directory visualization
+10. Offer the option to revert all changes
+
+## Example Workflow
+
+Here's what you'll see when running the application:
+
+```bash
+$ npm run
+
+=== Audio Files Organizer ===
+Choose scanning option:
+1. Scan current directory recursively
+2. Scan for iPod music files in iPod_Control/Music folder
+3. Enter custom target folder path
+Enter your choice (1/2/3): 2
+
+Choose operation mode:
+1. Copy files (original files remain in place)
+2. Move files (original files will be moved)
+Enter your choice (1/2): 1
+
+Operation mode: Copy files (originals preserved)
+
+Scanning for audio files in: /Users/user/iPod_Control/Music
+Found 15 audio files
+
+Processing: /Users/user/iPod_Control/Music/F01/BUYJ.mp3
+  Artist: Нейро Дубель
+  Album: Пiво
+  Title: Пiво
+Copied: /Users/user/iPod_Control/Music/F01/BUYJ.mp3 -> /Users/user/Organized_Music/Нейро Дубель/Пiво/Пiво.mp3
+
+Organization complete!
+Files have been organized in: /Users/user/Organized_Music
+
+📊 Organization Summary:
+──────────────────────────────
+📁 Total Files Organized: 15
+🎤 Unique Artists: 5
+💿 Unique Albums: 8
+📋 Operation: Copy (originals preserved)
+──────────────────────────────
+
+Do you want to revert all changes? (copied files will be deleted) (y/n): n
+Changes kept. Files copied and organized.
+```
+
+## Future Enhancements
+
+Planned features for future versions:
+- Whitelist/blacklist file extensions
+- Video file support
+- Custom naming patterns
+- Batch processing options
 
 ## File Structure
 

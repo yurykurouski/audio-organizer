@@ -104,6 +104,8 @@ export function generateOrganizationSummary(operations: any[]): string {
     const totalFiles = operations.length;
     const artists = new Set<string>();
     const albums = new Set<string>();
+    const copyCount = operations.filter(op => op.operation === 'copy').length;
+    const moveCount = operations.filter(op => op.operation === 'move').length;
 
     operations.forEach(op => {
         if (op.newPath) {
@@ -118,14 +120,25 @@ export function generateOrganizationSummary(operations: any[]): string {
         }
     });
 
-    return [
+    const summaryLines = [
         '',
         '📊 Organization Summary:',
         '─'.repeat(30),
         `📁 Total Files Organized: ${totalFiles}`,
         `🎤 Unique Artists: ${artists.size}`,
-        `💿 Unique Albums: ${albums.size}`,
-        '─'.repeat(30),
-        ''
-    ].join('\n');
+        `💿 Unique Albums: ${albums.size}`
+    ];
+
+    if (copyCount > 0 && moveCount > 0) {
+        summaryLines.push(`📋 Files Copied: ${copyCount}`);
+        summaryLines.push(`📦 Files Moved: ${moveCount}`);
+    } else if (copyCount > 0) {
+        summaryLines.push(`📋 Operation: Copy (originals preserved)`);
+    } else if (moveCount > 0) {
+        summaryLines.push(`📦 Operation: Move (originals relocated)`);
+    }
+
+    summaryLines.push('─'.repeat(30), '');
+
+    return summaryLines.join('\n');
 }

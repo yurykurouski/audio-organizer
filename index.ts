@@ -51,12 +51,35 @@ async function getTargetDirectory(): Promise<string> {
     }
 }
 
+// Function to get operation mode from user
+async function getOperationMode(): Promise<'copy' | 'move'> {
+    console.log('\nChoose operation mode:');
+    console.log('1. Copy files (original files remain in place)');
+    console.log('2. Move files (original files will be moved)');
+
+    const choice = await promptForDirectory('Enter your choice (1/2): ');
+
+    switch (choice.trim()) {
+        case '1':
+            return 'copy';
+        case '2':
+            return 'move';
+        default:
+            console.log('Invalid choice. Using copy mode by default.');
+            return 'copy';
+    }
+}
+
 // Main function
 async function main(): Promise<void> {
     try {
         // Get target directory from user
         const targetDirectory = await getTargetDirectory();
         console.log(`\nScanning for audio files in: ${targetDirectory}`);
+
+        // Get operation mode from user
+        const operationMode = await getOperationMode();
+        console.log(`\nOperation mode: ${operationMode === 'copy' ? 'Copy files (originals preserved)' : 'Move files (originals will be moved)'}`);
 
         // Find all audio files in the target directory
         const audioFiles = await findAudioFiles(targetDirectory);
@@ -86,7 +109,7 @@ async function main(): Promise<void> {
                 console.log(`  Album: ${fileInfo.album}`);
                 console.log(`  Title: ${fileInfo.title}`);
 
-                const result = await organizeFile(fileInfo, organizedDir);
+                const result = await organizeFile(fileInfo, organizedDir, operationMode);
                 if (result.operation) {
                     allOperations.push(result.operation);
                 }
@@ -104,11 +127,11 @@ async function main(): Promise<void> {
         }
 
         // Ask user if they want to revert changes
-        const shouldRevert = await promptUser('\nDo you want to revert all changes? (y/n): ');
+        const shouldRevert = await promptUser(`\nDo you want to revert all changes? ${operationMode === 'copy' ? '(copied files will be deleted)' : '(files will be moved back)'} (y/n): `);
         if (shouldRevert) {
             await revertOperations(allOperations, allCreatedDirectories);
         } else {
-            console.log('Changes kept. Files remain organized.');
+            console.log(`Changes kept. Files ${operationMode === 'copy' ? 'copied and' : ''} organized.`);
         }
 
     } catch (error) {

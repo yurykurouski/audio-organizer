@@ -7,9 +7,10 @@ import { promptForFileConflict } from './revertOperations';
 
 
 const rename = promisify(fs.rename);
+const copyFile = promisify(fs.copyFile);
 
-// Move file to organized structure and return operation info
-export async function organizeFile(fileInfo: FileInfo, baseDirectory: string): Promise<{ operation: FileOperation | null, createdDirs: string[] }> {
+// Organize file (copy or move) to organized structure and return operation info
+export async function organizeFile(fileInfo: FileInfo, baseDirectory: string, operationMode: 'copy' | 'move' = 'move'): Promise<{ operation: FileOperation | null, createdDirs: string[] }> {
     const artistDir = path.join(baseDirectory, fileInfo.artist);
     const albumDir = path.join(artistDir, fileInfo.album);
 
@@ -58,20 +59,26 @@ export async function organizeFile(fileInfo: FileInfo, baseDirectory: string): P
             }
         }
 
-        await rename(fileInfo.filePath, newFilePath);
-        console.log(`Moved: ${fileInfo.filePath} -> ${newFilePath}`);
+        // Perform the file operation based on mode
+        if (operationMode === 'copy') {
+            await copyFile(fileInfo.filePath, newFilePath);
+            console.log(`Copied: ${fileInfo.filePath} -> ${newFilePath}`);
+        } else {
+            await rename(fileInfo.filePath, newFilePath);
+            console.log(`Moved: ${fileInfo.filePath} -> ${newFilePath}`);
+        }
 
         // Return operation info for potential revert
         return {
             operation: {
                 originalPath: fileInfo.filePath,
                 newPath: newFilePath,
-                operation: 'move'
+                operation: operationMode
             },
             createdDirs
         };
     } catch (error) {
-        console.error(`Error moving file ${fileInfo.filePath}:`, error);
+        console.error(`Error ${operationMode === 'copy' ? 'copying' : 'moving'} file ${fileInfo.filePath}:`, error);
         return {
             operation: null,
             createdDirs
