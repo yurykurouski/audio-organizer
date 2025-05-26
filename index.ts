@@ -4,8 +4,11 @@ import {
     readAudioMetadata,
     findAudioFiles,
     ensureDirectory,
-    organizeFile
+    organizeFile,
+    revertOperations,
+    promptUser
 } from './src/helpers';
+import { FileOperation } from './src/types';
 
 
 // Main function
@@ -34,7 +37,11 @@ async function main(): Promise<void> {
 
         // Create organized music directory
         const organizedDir = path.join(currentDirectory, 'Organized_Music');
-        await ensureDirectory(organizedDir);
+        const organizedDirCreated = await ensureDirectory(organizedDir);
+
+        // Track all operations for potential revert
+        const allOperations: FileOperation[] = [];
+        const allCreatedDirectories: string[] = [...organizedDirCreated];
 
         // Process each audio file
         for (const filePath of audioFiles) {
@@ -46,12 +53,24 @@ async function main(): Promise<void> {
                 console.log(`  Album: ${fileInfo.album}`);
                 console.log(`  Title: ${fileInfo.title}`);
 
-                await organizeFile(fileInfo, organizedDir);
+                const result = await organizeFile(fileInfo, organizedDir);
+                if (result.operation) {
+                    allOperations.push(result.operation);
+                }
+                allCreatedDirectories.push(...result.createdDirs);
             }
         }
 
         console.log('\nOrganization complete!');
         console.log(`Files have been organized in: ${organizedDir}`);
+
+        // Ask user if they want to revert changes
+        const shouldRevert = await promptUser('\nDo you want to revert all changes? (y/n): ');
+        if (shouldRevert) {
+            await revertOperations(allOperations, allCreatedDirectories);
+        } else {
+            console.log('Changes kept. Files remain organized.');
+        }
 
     } catch (error) {
         console.error('Error during processing:', error);

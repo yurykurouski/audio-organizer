@@ -3,11 +3,28 @@ import { promisify } from 'util';
 
 const mkdir = promisify(fs.mkdir);
 
-// Create directory if it doesn't exist
-export async function ensureDirectory(dirPath: string): Promise<void> {
+// Create directory if it doesn't exist, returns array of newly created directories
+export async function ensureDirectory(dirPath: string): Promise<string[]> {
+    const createdDirs: string[] = [];
+
+    // Check which directories don't exist before creating them
+    const pathsToCheck: string[] = [];
+    let currentPath = dirPath;
+
+    while (currentPath && currentPath !== '/' && !fs.existsSync(currentPath)) {
+        pathsToCheck.unshift(currentPath);
+        currentPath = require('path').dirname(currentPath);
+    }
+
     try {
-        await mkdir(dirPath, { recursive: true });
+        if (pathsToCheck.length > 0) {
+            await mkdir(dirPath, { recursive: true });
+            createdDirs.push(...pathsToCheck);
+            console.log(`Created directories: ${pathsToCheck.join(', ')}`);
+        }
+        return createdDirs;
     } catch (error) {
         console.error(`Error creating directory ${dirPath}:`, error);
+        return [];
     }
 }
