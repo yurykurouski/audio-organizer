@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import {
     readAudioMetadata,
     findAudioFiles,
@@ -10,11 +11,19 @@ import {
 // Main function
 async function main(): Promise<void> {
     const currentDirectory = process.cwd();
-    console.log(`Scanning for audio files in: ${currentDirectory}`);
+    const iPodMusicDir = path.join(currentDirectory, 'iPod_Control', 'Music');
+    console.log(`Scanning for audio files in iPod folder: ${iPodMusicDir}`);
 
     try {
-        // Find all audio files
-        const audioFiles = await findAudioFiles(currentDirectory);
+        // Check if iPod_Control/Music directory exists
+        if (!fs.existsSync(iPodMusicDir)) {
+            console.error(`iPod_Control/Music directory not found at: ${iPodMusicDir}`);
+            console.log('Please ensure this is an iPod directory with the iPod_Control folder.');
+            return;
+        }
+
+        // Find all audio files in iPod_Control/Music
+        const audioFiles = await findAudioFiles(iPodMusicDir);
 
         if (audioFiles.length === 0) {
             console.log('No audio files found.');

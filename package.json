@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "run": "bun build index.ts --compile --outfile audio-organizer && ./audio-organizer",
+    "organize": "./audio-organizer",
     "start": "node dist/index.js",
-    "build": "tsc",
+    "compile": "bun build index.ts --compile --outfile audio-organizer",
     "watch": "tsc --watch",
     "dev": "node --watch dist/index.js",
     "lint": "eslint . --ext .ts"

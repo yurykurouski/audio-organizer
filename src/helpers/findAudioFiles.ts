@@ -26,15 +26,26 @@ export async function findAudioFiles(directory: string): Promise<string[]> {
         const items = await readdir(directory);
 
         for (const item of items) {
-            const fullPath = path.join(directory, item);
-            const stats = await stat(fullPath);
+            // Skip . and .. directories, but allow other hidden files/folders
+            if (item === '.' || item === '..') {
+                continue;
+            }
 
-            if (stats.isDirectory()) {
-                // Recursively search subdirectories
-                const subFiles = await findAudioFiles(fullPath);
-                audioFiles.push(...subFiles);
-            } else if (stats.isFile() && supportedExtensions.includes(path.extname(item).toLowerCase())) {
-                audioFiles.push(fullPath);
+            const fullPath = path.join(directory, item);
+
+            try {
+                const stats = await stat(fullPath);
+
+                if (stats.isDirectory()) {
+                    // Recursively search subdirectories (including hidden ones)
+                    const subFiles = await findAudioFiles(fullPath);
+                    audioFiles.push(...subFiles);
+                } else if (stats.isFile() && supportedExtensions.includes(path.extname(item).toLowerCase())) {
+                    audioFiles.push(fullPath);
+                }
+            } catch (fileError) {
+                // Log but continue if we can't access a specific file/folder
+                console.warn(`Warning: Could not access ${fullPath}:`, fileError);
             }
         }
     } catch (error) {
