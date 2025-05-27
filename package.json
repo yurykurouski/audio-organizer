@@ -5,10 +5,12 @@
   "scripts": {
     "organize": "./audio-organizer",
     "start": "node dist/index.js",
+    "build": "tsc",
     "compile": "bun build index.ts --compile --outfile audio-organizer",
     "watch": "tsc --watch",
     "dev": "node --watch dist/index.js",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "tsc": "tsc"
   },
   "author": "",
   "license": "ISC",

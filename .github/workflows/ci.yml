@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+        
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
+          
+    - name: Install dependencies
+      run: bun install
+      
+    - name: Lint code
+      run: bun run lint
+      
+    - name: Type check
+      run: bun run tsc --noEmit
+      
+    - name: Test compilation
+      run: bun build index.ts --outfile test-build.js
+      
+    - name: Test executable compilation
+      run: bun build index.ts --compile --outfile test-audio-organizer
+      
+    - name: Verify executable
+      run: |
+        chmod +x test-audio-organizer
+        file test-audio-organizer
+        ls -la test-audio-organizer
