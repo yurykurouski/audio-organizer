@@ -66,7 +66,7 @@ jobs:
       run: bun install
       
     - name: Build executable
-      run: bun build index.ts --compile --outfile audio-organizer-${{ matrix.platform }}-${{ matrix.arch }}${{ matrix.extension }}
+      run: bun build index.ts --compile --target=bun --outfile audio-organizer-${{ matrix.platform }}-${{ matrix.arch }}${{ matrix.extension }}
       
     - name: Make executable (Unix)
       if: matrix.os != 'windows-latest'

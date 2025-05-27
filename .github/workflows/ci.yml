@@ -37,10 +37,10 @@ jobs:
       run: bun run tsc --noEmit
       
     - name: Test compilation
-      run: bun build index.ts --outfile test-build.js
+      run: bun build index.ts --target=node --outfile test-build.js
       
     - name: Test executable compilation
-      run: bun build index.ts --compile --outfile test-audio-organizer
+      run: bun build index.ts --compile --target=bun --outfile test-audio-organizer
       
     - name: Verify executable
       run: |
