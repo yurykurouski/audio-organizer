@@ -8,6 +8,9 @@ on:
   release:
     types: [ created ]
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -108,5 +111,4 @@ jobs:
           audio-organizer-windows-x64/audio-organizer-windows-x64.exe
           audio-organizer-macos-x64/audio-organizer-macos-x64
           audio-organizer-macos-arm64/audio-organizer-macos-arm64
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
