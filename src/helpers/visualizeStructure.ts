@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { FileOperation } from '../types';
 
 interface DirectoryNode {
     name: string;
@@ -33,7 +34,7 @@ function buildDirectoryTree(dirPath: string): DirectoryNode {
                     if (!a.isDirectory && b.isDirectory) return 1;
                     return a.name.localeCompare(b.name);
                 });
-        } catch (error) {
+        } catch {
             // If we can't read the directory, just treat it as empty
             node.children = [];
         }
@@ -100,7 +101,7 @@ export function visualizeDirectoryStructure(organizedDir: string): string {
 /**
  * Prints a summary of the organization results
  */
-export function generateOrganizationSummary(operations: any[]): string {
+export function generateOrganizationSummary(operations: FileOperation[]): string {
     const totalFiles = operations.length;
     const artists = new Set<string>();
     const albums = new Set<string>();
