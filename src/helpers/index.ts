@@ -13,3 +13,4 @@ export {
     promptForConfirmation,
     promptForCustomPath
 } from './interactivePrompts';
+export { getTargetDirectory } from './getTargetDirectory';
