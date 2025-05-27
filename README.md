@@ -264,7 +264,7 @@ Build a portable executable that runs anywhere without dependencies:
 npm run compile
 ```
 
-This creates an `audio-organizer` executable (~58MB) that includes:
+This creates an `audio-organizer` executable (~20-40MB) that includes:
 - All source code compiled into a single binary
 - All Node.js dependencies bundled  
 - The Bun runtime embedded
