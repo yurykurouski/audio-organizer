@@ -1,4 +1,3 @@
-import * as path from 'path';
 import {
     readAudioMetadata,
     findAudioFiles,
@@ -9,7 +8,8 @@ import {
     promptForConfirmation,
     visualizeDirectoryStructure,
     generateOrganizationSummary,
-    getTargetDirectory
+    getTargetDirectory,
+    getOutputDirectory
 } from './src/helpers';
 import { FileOperation } from './src/types';
 
@@ -25,6 +25,10 @@ async function main(): Promise<void> {
         const operationMode = await promptForOperationMode();
         console.log(`\nOperation mode: ${operationMode === 'copy' ? 'Copy files (originals preserved)' : 'Move files (originals will be moved)'}`);
 
+        // Get output directory from user
+        const organizedDir = await getOutputDirectory();
+        console.log(`\nOutput directory: ${organizedDir}`);
+
         // Find all audio files in the target directory
         const audioFiles = await findAudioFiles(targetDirectory);
 
@@ -36,7 +40,6 @@ async function main(): Promise<void> {
         }
 
         // Create organized music directory
-        const organizedDir = path.join(process.cwd(), 'Organized_Music');
         const organizedDirCreated = await ensureDirectory(organizedDir);
 
         // Track all operations for potential revert

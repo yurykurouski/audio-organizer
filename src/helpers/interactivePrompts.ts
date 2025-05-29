@@ -114,3 +114,45 @@ export async function promptForCustomPath(): Promise<string> {
 
     return answer.path.trim();
 }
+
+// Interactive prompt for output directory selection
+export async function promptForOutputDirectory(): Promise<'default' | 'custom'> {
+    const answer = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'choice',
+            message: 'Choose output directory:',
+            choices: [
+                {
+                    name: 'Use default "Organized_Music" folder in current directory',
+                    value: 'default'
+                },
+                {
+                    name: 'Enter custom output directory path',
+                    value: 'custom'
+                }
+            ]
+        }
+    ]);
+
+    return answer.choice;
+}
+
+// Interactive prompt for custom output directory path
+export async function promptForCustomOutputPath(): Promise<string> {
+    const answer = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'path',
+            message: 'Enter the full path for organized music output:',
+            validate: (input: string) => {
+                if (!input.trim()) {
+                    return 'Please enter a valid path';
+                }
+                return true;
+            }
+        }
+    ]);
+
+    return answer.path.trim();
+}

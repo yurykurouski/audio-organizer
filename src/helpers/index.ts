@@ -11,6 +11,9 @@ export {
     promptForOperationMode,
     promptForFileConflictInteractive,
     promptForConfirmation,
-    promptForCustomPath
+    promptForCustomPath,
+    promptForOutputDirectory,
+    promptForCustomOutputPath
 } from './interactivePrompts';
 export { getTargetDirectory } from './getTargetDirectory';
+export { getOutputDirectory } from './getOutputDirectory';
