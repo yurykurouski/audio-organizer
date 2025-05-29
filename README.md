@@ -9,6 +9,7 @@ A powerful command-line tool that organizes your music collection by reading met
 - **🔍 Recursive Scanning**: Finds all audio files in directories and subdirectories  
 - **🏷️ Metadata Extraction**: Reads artist, album, and title from ID3 tags
 - **🔄 Flexible Modes**: Copy (preserve originals) or Move files
+- **📂 Custom Output**: Choose default or custom output directory location
 - **📊 Progress Tracking**: Real-time processing feedback and summary statistics
 
 ### 🎮 Interactive Interface
@@ -77,7 +78,11 @@ Select from three scanning options:
 - **Copy Mode** (Recommended): Preserves original files, creates organized copies
 - **Move Mode**: Relocates files to new structure (more storage efficient)
 
-### 3. Automatic Processing
+### 3. Choose Output Directory
+- **Default**: Use `Organized_Music` folder in the current directory
+- **Custom Path**: Specify any custom directory for organized output
+
+### 4. Automatic Processing
 The application will:
 1. Scan for audio files recursively
 2. Extract metadata (artist, album, title)
@@ -85,7 +90,7 @@ The application will:
 4. Handle encoding issues automatically
 5. Resolve file conflicts interactively
 
-### 4. Review & Revert
+### 5. Review & Revert
 - View organization summary and file tree
 - Option to revert all changes if needed
 
@@ -104,7 +109,12 @@ $ npm start
 ❯ Copy files (original files remain in place)
   Move files (original files will be moved)
 
+? Choose output directory: (Use arrow keys)
+❯ Use default "Organized_Music" folder in current directory
+  Enter custom output directory path
+
 Operation mode: Copy files (originals preserved)
+Output directory: /Users/user/Organized_Music
 
 Scanning for audio files in: /Users/user/Music
 Found 15 audio files
@@ -214,6 +224,36 @@ When duplicate files are detected, the application presents an interactive menu:
 
 Navigate with ↑/↓ arrow keys and press Enter to select. This ensures complete control over duplicate file handling.
 
+### 📁 Output Directory Options
+
+The application provides flexible output directory selection:
+
+**Default Option:**
+- Uses `Organized_Music` folder in the current working directory
+- Automatically created if it doesn't exist
+- Safe and predictable location for organized files
+
+**Custom Path Option:**
+- Specify any directory path for organized music output
+- Supports both absolute paths (e.g., `/Users/username/Music/MyLibrary`) and relative paths
+- Parent directory must exist (the output folder itself will be created)
+- Useful for organizing files to external drives, network storage, or specific locations
+
+**Interactive Selection:**
+```
+? Choose output directory: (Use arrow keys)
+❯ Use default "Organized_Music" folder in current directory
+  Enter custom output directory path
+
+Enter the full path for organized music output: /Volumes/ExternalDrive/OrganizedMusic
+```
+
+**Benefits:**
+- **Flexibility**: Choose where your organized music is stored
+- **External Storage**: Direct organization to external drives or network locations
+- **Custom Organization**: Integrate with existing folder structures
+- **Safe Validation**: Ensures parent directory exists before proceeding
+
 ### 🌐 Character Encoding Fix
 
 Automatically fixes encoding issues common in Windows-created files with Cyrillic text:
@@ -236,7 +276,8 @@ Automatically fixes encoding issues common in Windows-created files with Cyrilli
 
 **Interactive Features:**
 - **Directory Selection**: Navigate between scanning options
-- **Operation Mode**: Choose copy or move mode  
+- **Operation Mode**: Choose copy or move mode
+- **Output Directory**: Select default or custom output location
 - **File Conflicts**: Resolve duplicates with arrow navigation
 - **Confirmations**: Yes/No prompts with clear default values
 
