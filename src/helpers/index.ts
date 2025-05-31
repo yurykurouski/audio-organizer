@@ -17,3 +17,4 @@ export {
 } from './interactivePrompts';
 export { getTargetDirectory } from './getTargetDirectory';
 export { getOutputDirectory } from './getOutputDirectory';
+export { ProgressConfig } from './progressConfig';

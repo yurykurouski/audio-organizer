@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { promisify } from 'util';
+import { ProgressConfig } from './progressConfig';
 
 const mkdir = promisify(fs.mkdir);
 
@@ -20,7 +21,9 @@ export async function ensureDirectory(dirPath: string): Promise<string[]> {
         if (pathsToCheck.length > 0) {
             await mkdir(dirPath, { recursive: true });
             createdDirs.push(...pathsToCheck);
-            console.log(`Created directories: ${pathsToCheck.join(', ')}`);
+            if (ProgressConfig.isVerbose()) {
+                console.log(`Created directories: ${pathsToCheck.join(', ')}`);
+            }
         }
         return createdDirs;
     } catch (error) {

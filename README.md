@@ -365,7 +365,6 @@ The executable works on any macOS system (arm64) without requiring Node.js or ot
 - **Custom Naming Patterns**: Configurable folder/file naming
 - **Batch Processing**: Handle multiple directories
 - **Configuration Files**: Save user preferences
-- **Progress Bars**: Visual progress indicators for large collections
 
 ## 🤝 Contributing
 

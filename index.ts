@@ -9,9 +9,11 @@ import {
     visualizeDirectoryStructure,
     generateOrganizationSummary,
     getTargetDirectory,
-    getOutputDirectory
+    getOutputDirectory,
+    ProgressConfig
 } from './src/helpers';
 import { FileOperation } from './src/types';
+import * as cliProgress from 'cli-progress';
 
 
 // Main function
@@ -46,16 +48,30 @@ async function main(): Promise<void> {
         const allOperations: FileOperation[] = [];
         const allCreatedDirectories: string[] = [...organizedDirCreated];
 
+        // Create progress bar
+        const progressBar = new cliProgress.SingleBar({
+            format: 'Processing |{bar}| {percentage}% | {value}/{total} files | {filename}',
+            barCompleteChar: '\u2588',
+            barIncompleteChar: '\u2591',
+            hideCursor: true
+        }, cliProgress.Presets.rect);
+
+        // Disable verbose logging during progress bar
+        ProgressConfig.setVerbose(false);
+
+        // Start progress bar
+        progressBar.start(audioFiles.length, 0, { filename: 'Starting...' });
+
         // Process each audio file
-        for (const filePath of audioFiles) {
-            console.log(`Processing: ${filePath}`);
+        for (let i = 0; i < audioFiles.length; i++) {
+            const filePath = audioFiles[i];
+            const fileName = filePath.split('/').pop() || filePath;
+
+            // Update progress bar with current file
+            progressBar.update(i, { filename: fileName.length > 40 ? '...' + fileName.slice(-37) : fileName });
 
             const fileInfo = await readAudioMetadata(filePath);
             if (fileInfo) {
-                console.log(`  Artist: ${fileInfo.artist}`);
-                console.log(`  Album: ${fileInfo.album}`);
-                console.log(`  Title: ${fileInfo.title}`);
-
                 const result = await organizeFile(fileInfo, organizedDir, operationMode);
                 if (result.operation) {
                     allOperations.push(result.operation);
@@ -63,6 +79,13 @@ async function main(): Promise<void> {
                 allCreatedDirectories.push(...result.createdDirs);
             }
         }
+
+        // Complete progress bar
+        progressBar.update(audioFiles.length, { filename: 'Complete!' });
+        progressBar.stop();
+
+        // Re-enable verbose logging after progress bar
+        ProgressConfig.setVerbose(true);
 
         console.log('\nOrganization complete!');
         console.log(`Files have been organized in: ${organizedDir}`);

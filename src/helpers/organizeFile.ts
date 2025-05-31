@@ -2,8 +2,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { promisify } from 'util';
 import { FileInfo, FileOperation } from '../types';
-import { ensureDirectory } from './ensureDirectory.js';
-import { promptForFileConflictInteractive } from './interactivePrompts.js';
+import { ensureDirectory } from './ensureDirectory';
+import { promptForFileConflictInteractive } from './interactivePrompts';
+import { ProgressConfig } from './progressConfig';
 
 
 const rename = promisify(fs.rename);
@@ -29,22 +30,32 @@ export async function organizeFile(fileInfo: FileInfo, baseDirectory: string, op
 
             switch (choice) {
                 case 'keep':
-                    console.log(`Keeping existing file: ${newFilePath}`);
-                    console.log(`Skipping: ${fileInfo.filePath}`);
+                    if (ProgressConfig.isVerbose()) {
+                        console.log(`Keeping existing file: ${newFilePath}`);
+                        console.log(`Skipping: ${fileInfo.filePath}`);
+                    }
                     return {
                         operation: null,
                         createdDirs
                     };
 
                 case 'replace':
-                    console.log(`Replacing existing file: ${newFilePath}`);
+                    if (ProgressConfig.isVerbose()) {
+                        console.log(`Replacing existing file: ${newFilePath}`);
+                    }
                     // Remove the existing file first, then continue with the move operation
-                    fs.unlink(newFilePath, () => console.log(`Removed existing file: ${newFilePath}`));
+                    fs.unlink(newFilePath, () => {
+                        if (ProgressConfig.isVerbose()) {
+                            console.log(`Removed existing file: ${newFilePath}`);
+                        }
+                    });
                     // Continue with the move operation using the correct filename from metadata
                     break;
 
                 case 'rename':
-                    console.log(`Renaming new file to avoid conflict...`);
+                    if (ProgressConfig.isVerbose()) {
+                        console.log(`Renaming new file to avoid conflict...`);
+                    }
                     // Find a unique name with number suffix
                     let counter = 1;
                     let uniqueFilePath = newFilePath;
@@ -54,7 +65,9 @@ export async function organizeFile(fileInfo: FileInfo, baseDirectory: string, op
                         counter++;
                     }
                     newFilePath = uniqueFilePath;
-                    console.log(`New filename: ${path.basename(newFilePath)}`);
+                    if (ProgressConfig.isVerbose()) {
+                        console.log(`New filename: ${path.basename(newFilePath)}`);
+                    }
                     break;
             }
         }
@@ -62,10 +75,14 @@ export async function organizeFile(fileInfo: FileInfo, baseDirectory: string, op
         // Perform the file operation based on mode
         if (operationMode === 'copy') {
             await copyFile(fileInfo.filePath, newFilePath);
-            console.log(`Copied: ${fileInfo.filePath} -> ${newFilePath}`);
+            if (ProgressConfig.isVerbose()) {
+                console.log(`Copied: ${fileInfo.filePath} -> ${newFilePath}`);
+            }
         } else {
             await rename(fileInfo.filePath, newFilePath);
-            console.log(`Moved: ${fileInfo.filePath} -> ${newFilePath}`);
+            if (ProgressConfig.isVerbose()) {
+                console.log(`Moved: ${fileInfo.filePath} -> ${newFilePath}`);
+            }
         }
 
         // Return operation info for potential revert

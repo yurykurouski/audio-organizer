@@ -25,7 +25,9 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@types/cli-progress": "^3.11.6",
     "@types/inquirer": "^9.0.8",
+    "cli-progress": "^3.12.0",
     "iconv-lite": "^0.6.3",
     "inquirer": "^12.6.3",
     "music-metadata": "^11.2.3"
